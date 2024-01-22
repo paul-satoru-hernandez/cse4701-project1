@@ -1,0 +1,15 @@
+SELECT Fname, Minit, Lname
+FROM
+(
+    SELECT Fname, Minit, Lname
+    FROM EMPLOYEE, DEPENDENT
+    WHERE EMPLOYEE.Ssn=DEPENDENT.Essn AND Relationship="Spouse"
+) TEMP1
+LEFT OUTER JOIN 
+(
+    SELECT DISTINCT Fname AS Fname2, Minit AS Minit2, Lname AS Lname2
+    FROM EMPLOYEE, DEPENDENT
+    WHERE EMPLOYEE.Ssn=DEPENDENT.Essn AND (Relationship="Son" OR Relationship="Daughter")
+) TEMP2
+ON TEMP1.Fname=TEMP2.Fname2 AND TEMP1.Minit=TEMP2.Minit2 AND TEMP1.Lname=TEMP2.Lname2
+WHERE TEMP2.Fname2 IS NULL AND TEMP2.Minit2 IS NULL AND TEMP2.Lname2 IS NULL;
